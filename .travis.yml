@@ -1,0 +1,22 @@
+# Travis-CI script for the Energy Modeller
+#
+# This is being developed for the TANGO Project: http://tango-project.eu
+#
+# Copyright: Richard Kavanagh, University of Leeds, 2016.
+#
+# This code is licensed under an Apache 2.0 license. Please, refer to the LICENSE.TXT file for more information
+
+language: java
+jdk:
+  - oraclejdk8
+  
+# SonnarQube Configuration
+addons:
+  sonarqube: true
+  apt:
+    packages:
+      - oracle-java8-installer
+
+script:
+  - sudo update-java-alternatives --set "java-8-oracle"
+  - export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
