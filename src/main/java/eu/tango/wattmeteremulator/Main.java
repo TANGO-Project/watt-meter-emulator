@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package eu.ascetic.utils.hostpoweremulator;
+package eu.tango.wattmeteremulator;
 
 /**
  * This is the main entry point for the emulated watt meter. It holds the

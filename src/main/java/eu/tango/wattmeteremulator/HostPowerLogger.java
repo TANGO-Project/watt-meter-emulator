@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package eu.ascetic.utils.hostpoweremulator;
+package eu.tango.wattmeteremulator;
 
-import eu.tango.energymodeller.types.energyuser.Host;
 import eu.ascetic.ioutils.io.GenericLogger;
 import eu.ascetic.ioutils.io.ResultsStore;
+import eu.tango.energymodeller.types.energyuser.Host;
 import java.io.File;
 
 /**
