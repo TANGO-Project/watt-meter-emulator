@@ -52,7 +52,7 @@ public class HostPowerEmulator implements Runnable {
     private String predictorName = "CpuOnlyBestFitEnergyPredictor";
     private final Settings settings = new Settings(PROPS_FILE_NAME);
     private static final String PROPS_FILE_NAME = "watt-meter-emulator.properties";
-    private static final String DEFAULT_DATA_SOURCE_PACKAGE = "eu.tango.energymodeller.queryinterface.datasourceclient";
+    private static final String DEFAULT_DATA_SOURCE_PACKAGE = "eu.tango.energymodeller.datasourceclient";
     private static final String DEFAULT_PREDICTOR_PACKAGE = "eu.tango.energymodeller.energypredictor";
 
     /**

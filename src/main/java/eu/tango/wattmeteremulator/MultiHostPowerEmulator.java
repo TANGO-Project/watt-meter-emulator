@@ -58,8 +58,8 @@ public class MultiHostPowerEmulator implements Runnable {
     private boolean autoHostDiscovery = false;
     private final Settings settings = new Settings(PROPS_FILE_NAME);
     private static final String PROPS_FILE_NAME = "watt-meter-emulator.properties";
-    private static final String DEFAULT_DATA_SOURCE_PACKAGE = "eu.ascetic.asceticarchitecture.iaas.energymodeller.queryinterface.datasourceclient";
-    private static final String DEFAULT_PREDICTOR_PACKAGE = "eu.ascetic.asceticarchitecture.iaas.energymodeller.energypredictor";
+    private static final String DEFAULT_DATA_SOURCE_PACKAGE = "eu.tango.energymodeller.datasourceclient";
+    private static final String DEFAULT_PREDICTOR_PACKAGE = "eu.tango.energymodeller.energypredictor";
 
     /**
      * This creates a new multi host power emulator instance. It is to be used

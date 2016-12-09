@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.github.RichardKav</groupId>
             <artifactId>io-utils</artifactId>
-            <version>V1.0</version>
+            <version>-V1.0-g3a37cb4-1</version>
         </dependency>
     </dependencies>
     <description>This program aims to emulate the presence of a Watt Meter. It will also clone calibration data from a suitable host.</description>
