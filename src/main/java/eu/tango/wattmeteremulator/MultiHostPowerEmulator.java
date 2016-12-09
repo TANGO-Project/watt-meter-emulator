@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  */
 public class MultiHostPowerEmulator implements Runnable {
 
-    private HostDataSource source = new ZabbixDirectDbDataSourceAdaptor();
+    private HostDataSource source;
     private final DatabaseConnector database = new DefaultDatabaseConnector();
     private boolean running = true;
     private int pollInterval = 1;
@@ -68,6 +68,8 @@ public class MultiHostPowerEmulator implements Runnable {
      */
     public MultiHostPowerEmulator() {
         pollInterval = settings.getInt("poll_interval", pollInterval);
+        String sourceStr = settings.getString("data_source", "ZabbixDirectDbDataSourceAdaptor");
+        setDataSource(sourceStr);
         loggerOutputFile = settings.getString("output_filename", loggerOutputFile);
         outputName = settings.getString("output_name", outputName);
         predictorName = settings.getString("predictor", predictorName);
@@ -125,7 +127,7 @@ public class MultiHostPowerEmulator implements Runnable {
      * @param dataSource The name of the data source to use for the energy
      * modeller
      */
-    public void setDataSource(String dataSource) {
+    public final void setDataSource(String dataSource) {
         try {
             if (!dataSource.startsWith(DEFAULT_DATA_SOURCE_PACKAGE)) {
                 dataSource = DEFAULT_DATA_SOURCE_PACKAGE + "." + dataSource;
