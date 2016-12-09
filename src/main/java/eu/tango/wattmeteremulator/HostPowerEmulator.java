@@ -34,13 +34,13 @@ import java.util.logging.Logger;
 /**
  * The aim of this application is to clone another's calibration profile so that
  * it can estimate the amount of energy used by the host.
- * 
+ *
  * @author Richard Kavanagh
  *
  */
 public class HostPowerEmulator implements Runnable {
 
-    private HostDataSource source = new ZabbixDirectDbDataSourceAdaptor();
+    private HostDataSource source;
     private final DatabaseConnector database = new DefaultDatabaseConnector();
     private String hostname = "";
     private String cloneHostname = "";
@@ -82,7 +82,7 @@ public class HostPowerEmulator implements Runnable {
         HostPowerEmulator emulator = new HostPowerEmulator(hostname, cloneHostname);
         if (args.length >= 3 && "stop_on_clone".equals(args[2])) {
             emulator.setStopOnClone(true);
-        }        
+        }
         emulatorThread = new Thread(emulator);
         emulatorThread.setDaemon(false);
         emulatorThread.start();
@@ -99,6 +99,8 @@ public class HostPowerEmulator implements Runnable {
         this.hostname = hostname;
         this.cloneHostname = cloneHostname;
         pollInterval = settings.getInt("poll_interval", pollInterval);
+        String sourceStr = settings.getString("data_source", "ZabbixDirectDbDataSourceAdaptor");
+        setDataSource(sourceStr);
         loggerOutputFile = settings.getString("output_filename", loggerOutputFile);
         outputName = settings.getString("output_name", outputName);
         predictorName = settings.getString("predictor", predictorName);
@@ -116,14 +118,16 @@ public class HostPowerEmulator implements Runnable {
         this.hostname = hostname;
         this.cloneHostname = null;
         pollInterval = settings.getInt("poll_interval", pollInterval);
-        loggerOutputFile = settings.getString("output_filename", loggerOutputFile);        
+        String sourceStr = settings.getString("data_source", "ZabbixDirectDbDataSourceAdaptor");
+        setDataSource(sourceStr);
+        loggerOutputFile = settings.getString("output_filename", loggerOutputFile);
         outputName = settings.getString("output_name", outputName);
         predictorName = settings.getString("predictor", predictorName);
         if (settings.isChanged()) {
             settings.save(PROPS_FILE_NAME);
         }
     }
-    
+
     /**
      * This allows the power estimator to be set
      *
@@ -149,7 +153,7 @@ public class HostPowerEmulator implements Runnable {
             Logger.getLogger(HostPowerEmulator.class.getName()).log(Level.WARNING, "The predictor specified did not work", ex);
         }
         return answer;
-    }    
+    }
 
     /**
      * This clones a host's calibration data in the event the first host named
@@ -179,7 +183,7 @@ public class HostPowerEmulator implements Runnable {
      * @param dataSource The name of the data source to use for the energy
      * modeller
      */
-    public void setDataSource(String dataSource) {
+    public final void setDataSource(String dataSource) {
         try {
             if (!dataSource.startsWith(DEFAULT_DATA_SOURCE_PACKAGE)) {
                 dataSource = DEFAULT_DATA_SOURCE_PACKAGE + "." + dataSource;
@@ -204,6 +208,13 @@ public class HostPowerEmulator implements Runnable {
                 source = new ZabbixDirectDbDataSourceAdaptor();
             }
             Logger.getLogger(EnergyModeller.class.getName()).log(Level.WARNING, "The data source did not work", ex);
+        }
+        if (dataSource.contains("SlurmDataSourceAdaptor")) {
+            try {
+                Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+            } catch (InterruptedException ex) {
+                Logger.getLogger(HostPowerEmulator.class.getName()).log(Level.SEVERE, "The power emulator was interupted.", ex);
+            }
         }
     }
 
@@ -311,8 +322,9 @@ public class HostPowerEmulator implements Runnable {
     }
 
     /**
-     * This checks to see if the emulator will stop on cloning data, 
-     * thus it acts as a cloning tool.
+     * This checks to see if the emulator will stop on cloning data, thus it
+     * acts as a cloning tool.
+     *
      * @return the stopOnClone
      */
     public boolean isStopOnClone() {
@@ -321,6 +333,7 @@ public class HostPowerEmulator implements Runnable {
 
     /**
      * This stops the emulator on cloning data, thus it acts as a cloning tool.
+     *
      * @param stopOnClone the stopOnClone to set
      */
     public void setStopOnClone(boolean stopOnClone) {

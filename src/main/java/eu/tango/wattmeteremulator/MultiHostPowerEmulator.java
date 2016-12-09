@@ -153,6 +153,17 @@ public class MultiHostPowerEmulator implements Runnable {
             }
             Logger.getLogger(EnergyModeller.class.getName()).log(Level.WARNING, "The data source did not work", ex);
         }
+        if (dataSource.contains("SlurmDataSourceAdaptor")) {
+            try {
+                /**
+                 * Wait a short time to ensure the adaptor has fully time to get
+                 * ready. i.e. it may have to scrape values from a file.
+                 */
+                Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+            } catch (InterruptedException ex) {
+                Logger.getLogger(HostPowerEmulator.class.getName()).log(Level.SEVERE, "The power emulator was interupted.", ex);
+            }
+        }
     }
 
     @Override
@@ -203,7 +214,6 @@ public class MultiHostPowerEmulator implements Runnable {
         database.getHostCalibrationData(hosts);
         for (Host host : hosts) {
             if (!host.isCalibrated()) {
-                hosts.remove(host);
                 continue;
             }
             System.out.println("Host: " + host.toString());
