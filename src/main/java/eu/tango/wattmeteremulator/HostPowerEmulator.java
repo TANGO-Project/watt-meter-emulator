@@ -12,11 +12,13 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
+ * 
+ * This is being developed for the TANGO Project: http://tango-project.eu
+ * 
  */
 package eu.tango.wattmeteremulator;
 
 import eu.ascetic.ioutils.io.Settings;
-import eu.tango.energymodeller.EnergyModeller;
 import eu.tango.energymodeller.datasourceclient.HostDataSource;
 import eu.tango.energymodeller.datasourceclient.HostMeasurement;
 import eu.tango.energymodeller.datasourceclient.SigarDataSourceAdaptor;
@@ -202,12 +204,12 @@ public class HostPowerEmulator implements Runnable {
             if (source == null) {
                 source = new ZabbixDirectDbDataSourceAdaptor();
             }
-            Logger.getLogger(EnergyModeller.class.getName()).log(Level.WARNING, "The data source specified was not found");
+            Logger.getLogger(HostPowerEmulator.class.getName()).log(Level.WARNING, "The data source specified was not found");
         } catch (InstantiationException | IllegalAccessException ex) {
             if (source == null) {
                 source = new ZabbixDirectDbDataSourceAdaptor();
             }
-            Logger.getLogger(EnergyModeller.class.getName()).log(Level.WARNING, "The data source did not work", ex);
+            Logger.getLogger(HostPowerEmulator.class.getName()).log(Level.WARNING, "The data source did not work", ex);
         }
         if (dataSource.contains("SlurmDataSourceAdaptor")) {
             try {
