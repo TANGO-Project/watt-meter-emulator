@@ -12,11 +12,11 @@ jdk:
   
 # SonnarQube Configuration
 addons:
-  sonarqube: true
-  apt:
-    packages:
-      - oracle-java8-installer
+  sonarcloud:
+    organization: "richardkav-github"
+    token:
+      secure: 4bfd776407ac9a01b64454c66f5dcb811a7acc49
 
 script:
-  - sudo update-java-alternatives --set "java-8-oracle"
-  - export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+  - mvn install -DskipTest -q
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
