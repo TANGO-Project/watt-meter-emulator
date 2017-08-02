@@ -25,6 +25,9 @@ The Energy Modeller's primary two prerequisites are:
 
 #### Installation and configuration procedure
 
+To compile the Watt Meter emulator, the following steps must be performed:
+1.	Generate the Watt Meter enulator jar using the command: mvn clean package (executed  in the Watt meter emulator directory)
+2.	Install the database. SQL statements to setup the database are held in the file “energy modeller db.sql” file it is held in the {energy-modeller root directory}\src\main\resources.
 
 #### Build status from Travis-CI
 
@@ -36,10 +39,6 @@ The Sonar Cloud reports for this project are available at: https://sonarcloud.io
 ### Installation for running the service
 
 In this case, we are going to detail how to perform a calibration run.
-
-#### Configuring the service
-
-TODO
 
 ## Usage Guide
 
