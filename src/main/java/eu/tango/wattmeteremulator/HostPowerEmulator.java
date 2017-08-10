@@ -23,6 +23,7 @@ import eu.tango.energymodeller.datasourceclient.HostDataSource;
 import eu.tango.energymodeller.datasourceclient.HostMeasurement;
 import eu.tango.energymodeller.datasourceclient.SigarDataSourceAdaptor;
 import eu.tango.energymodeller.datasourceclient.ZabbixDirectDbDataSourceAdaptor;
+import eu.tango.energymodeller.datastore.AcceleratorCalibrationDataLoader;
 import eu.tango.energymodeller.datastore.DatabaseConnector;
 import eu.tango.energymodeller.datastore.DefaultDatabaseConnector;
 import eu.tango.energymodeller.energypredictor.CpuOnlyBestFitEnergyPredictor;
@@ -173,6 +174,7 @@ public class HostPowerEmulator implements Runnable {
             clone = database.getHostCalibrationData(clone);
             host.setCalibrationData(clone.getCalibrationData());
             database.setHostCalibrationData(host);
+            AcceleratorCalibrationDataLoader.getHostsAcceleratorCalibrationData(host);
         }
         if (stopOnClone == true) {
             running = false;
@@ -230,6 +232,7 @@ public class HostPowerEmulator implements Runnable {
         loggerThread.setDaemon(true);
         loggerThread.start();
         database.getHostCalibrationData(host);
+        AcceleratorCalibrationDataLoader.getHostsAcceleratorCalibrationData(host);
 
         /**
          * The first phase is to clone the resource calibration data of another
@@ -243,6 +246,7 @@ public class HostPowerEmulator implements Runnable {
                 Logger.getLogger(HostPowerEmulator.class.getName()).log(Level.SEVERE, "The power emulator was interupted.", ex);
             }
             database.getHostCalibrationData(host);
+            AcceleratorCalibrationDataLoader.getHostsAcceleratorCalibrationData(host);
         }
         if (!host.isCalibrated()) {
             running = false;

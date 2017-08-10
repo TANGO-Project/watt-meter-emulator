@@ -23,6 +23,8 @@ import eu.tango.energymodeller.datasourceclient.HostDataSource;
 import eu.tango.energymodeller.datasourceclient.HostMeasurement;
 import eu.tango.energymodeller.datasourceclient.SigarDataSourceAdaptor;
 import eu.tango.energymodeller.datasourceclient.ZabbixDirectDbDataSourceAdaptor;
+import eu.tango.energymodeller.datastore.AcceleratorCalibrationDataLoader;
+import static eu.tango.energymodeller.datastore.AcceleratorCalibrationDataLoader.getHostsAcceleratorCalibrationData;
 import eu.tango.energymodeller.datastore.DatabaseConnector;
 import eu.tango.energymodeller.datastore.DefaultDatabaseConnector;
 import eu.tango.energymodeller.energypredictor.CpuOnlyBestFitEnergyPredictor;
@@ -178,6 +180,7 @@ public class MultiHostPowerEmulator implements Runnable {
         loggerThread.start();
         EnergyPredictorInterface predictor = getPredictor(predictorName);
         getHostCalibrationData(hosts, predictor);
+        getHostsAcceleratorCalibrationData(hosts);
         /**
          * The main phase is to monitor the host and to report its estimated
          * host energy usage, in the event calibration data is available.
@@ -214,6 +217,7 @@ public class MultiHostPowerEmulator implements Runnable {
      */
     private List<Host> getHostCalibrationData(List<Host> hosts, EnergyPredictorInterface predictor) {
         database.getHostCalibrationData(hosts);
+        AcceleratorCalibrationDataLoader.getHostsAcceleratorCalibrationData(hosts);
         for (Host host : hosts) {
             if (!host.isCalibrated()) {
                 continue;
@@ -223,7 +227,7 @@ public class MultiHostPowerEmulator implements Runnable {
             System.out.println("");
         }
         return hosts;
-    }
+    }   
 
     /**
      * This updates the hosts list and ensures when a host disappears that its
