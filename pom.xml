@@ -100,7 +100,7 @@
         <dependency>
             <groupId>com.github.Tango-Project</groupId>
             <artifactId>energy-modeller</artifactId>
-            <version>ac29940a60</version>
+            <version>24acfa47dd</version>
         </dependency>
         <dependency>
             <groupId>com.github.RichardKav</groupId>
