@@ -12,16 +12,18 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * This is being developed for the TANGO Project: http://tango-project.eu
- * 
+ *
  */
 package eu.tango.wattmeteremulator;
 
 import eu.ascetic.ioutils.io.Settings;
+import eu.tango.energymodeller.datasourceclient.CollectDInfluxDbDataSourceAdaptor;
 import eu.tango.energymodeller.datasourceclient.HostDataSource;
 import eu.tango.energymodeller.datasourceclient.HostMeasurement;
 import eu.tango.energymodeller.datasourceclient.SigarDataSourceAdaptor;
+import eu.tango.energymodeller.datasourceclient.TangoEnvironmentDataSourceAdaptor;
 import eu.tango.energymodeller.datasourceclient.ZabbixDirectDbDataSourceAdaptor;
 import eu.tango.energymodeller.datastore.AcceleratorCalibrationDataLoader;
 import eu.tango.energymodeller.datastore.DatabaseConnector;
@@ -264,6 +266,22 @@ public class HostPowerEmulator implements Runnable {
             HostMeasurement measurement = source.getHostData(host);
             double power = predictor.predictPowerUsed(host, measurement.getCpuUtilisation());
             logger.printToFile(logger.new Pair(host, power));
+            if (source instanceof TangoEnvironmentDataSourceAdaptor) {
+                /**
+                 * The next line writes host power values. This helps
+                 * demonstrate where the application's power consumption derives
+                 * from.
+                 */
+                ((TangoEnvironmentDataSourceAdaptor) source).writeOutHostValuesToInflux(host, power, true);
+            }
+            if (source instanceof CollectDInfluxDbDataSourceAdaptor) {
+                /**
+                 * The next line writes host power values. This helps
+                 * demonstrate where the application's power consumption derives
+                 * from.
+                 */
+                ((CollectDInfluxDbDataSourceAdaptor) source).writeOutHostValuesToInflux(host, power, true);
+            }
             try {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(pollInterval));
             } catch (InterruptedException ex) {
