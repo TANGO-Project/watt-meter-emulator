@@ -198,7 +198,10 @@ public class MultiHostPowerEmulator implements Runnable {
                 if (!host.isCalibrated()) {
                     continue;
                 }
-                power = predictor.predictPowerUsed(host, measurement.getCpuUtilisation());
+                //TODO adjust fix here for slow incoming data from % cpu util metric
+                power = predictor.predictPowerUsed(host, source.getCpuUtilisation(host, 20)); //measurement.getCpuUtilisation()
+//                System.out.println("Host: " + host.getHostName() + " Util 20s: " + source.getCpuUtilisation(host, 20));
+//                System.out.println("Host: " + host.getHostName() + " Util: " + measurement.getCpuUtilisation());
                 logger.printToFile(logger.new Pair(host, power));
                 if (source instanceof TangoEnvironmentDataSourceAdaptor) {
                     /**
